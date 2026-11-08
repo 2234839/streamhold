@@ -13,10 +13,10 @@
 各类 CDN/网关的空闲超时）在「已连接但无字节」期间会放弃请求（499/504），
 导致 README 图片裂图。
 
-这是一个普遍问题——参见 GitHub 社区讨论 [#143996](https://github.com/orgs/community/discussions/143996)
-和 [#183464](https://github.com/orgs/community/discussions/183464)。那两个案例的根因是公共统计卡服务不稳定；
-streamhold 针对的是同样的症状、但不同的根因：**自己的后端服务冷启动**。无论哪种，
-camo 都会在首字节到来前放弃，streamhold 通过握住流直到上游就绪来根治。
+这个问题很多人都在踩：GitHub 社区讨论 [#143996](https://github.com/orgs/community/discussions/143996)
+和 [#183464](https://github.com/orgs/community/discussions/183464) 里，大家的图片裂是因为别人的统计卡服务宕机了；
+我的情况则是自己的后端服务在冷启动——原因不同，结果一样：上游出字节太慢，camo 等不及。
+streamhold 就是让 camo 永远等得到字节：它先把响应流握在手里，上游多久醒都不怕。
 
 ## 工作原理
 

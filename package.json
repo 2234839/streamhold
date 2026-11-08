@@ -1,0 +1,15 @@
+{
+  "name": "streamhold",
+  "version": "0.1.0",
+  "description": "占位保活反代：让冷启动上游的图片请求在急性子代理（GitHub camo 等）面前永不超时",
+  "type": "module",
+  "scripts": {
+    "start": "bun run streamhold.ts"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "tsdown": "^0.23.7",
+    "typescript": "^7.0.2"
+  }
+}

@@ -10,6 +10,8 @@ A placeholder keep-alive reverse proxy: image requests to **cold-start upstreams
 
 The upstream being proxied is an on-demand service with cold starts (e.g. services hosted by [DynaPM](https://github.com/2234839/DynaPM)): the first request can take 2\~4 seconds before the first byte arrives. Proxies along the way (GitHub camo with ~3\~12s patience, various CDN/gateway idle timeouts) give up during the "connected but zero bytes" window (499/504), resulting in broken images in README files.
 
+This is a widely-hit problem — see GitHub community discussions [#143996](https://github.com/orgs/community/discussions/143996) and [#183464](https://github.com/orgs/community/discussions/183464). Those cases are caused by flaky public stat-card servers; streamhold was built for the same symptom with a different root cause: your **own backend cold-starting**. Either way, camo times out before the first byte, and streamhold fixes it by holding the stream open until the upstream is ready.
+
 ## How it works
 
 Pure byte relay — no content parsing:

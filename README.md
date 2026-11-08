@@ -38,10 +38,10 @@ bun run streamhold.ts
 
 ```
 /svg/tsfullstack/group/gs.svg
-│   │           └─ 转发到上游的实际访问路径（原样拼接 search）
-│   └─ 规则名，在 ROUTES 环境变量中匹配目标服务域名（作为 Host 头发上游）
-└─ 格式声明：流式响应的内容类型（svg→image/svg+xml，xml→text/xml），
-   决定冷路径 padding 模式提交的 content-type
+│   │           └── 转发到上游的实际访问路径（原样拼接 search）
+│   └── 规则名，在 ROUTES 环境变量中匹配目标服务域名（作为 Host 头发上游）
+└── 格式声明：流式响应的内容类型（svg→image/svg+xml，xml→text/xml），
+    决定冷路径 padding 模式提交的 content-type
 ```
 
 ## 配置（.env）

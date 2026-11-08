@@ -4,8 +4,11 @@
   "description": "占位保活反代：让冷启动上游的图片请求在急性子代理（GitHub camo 等）面前永不超时",
   "type": "module",
   "scripts": {
-    "start": "bun run streamhold.ts"
+    "start": "bun run streamhold.ts",
+    "build": "tsdown && llrt compile streamhold.js",
+    "deploy": "tsdown && llrt compile streamhold.js && scp streamhold.lrt root@shenzilong.cn:/root/app/streamhold/"
   },
+
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^26.6.6",

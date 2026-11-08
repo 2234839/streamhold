@@ -76,5 +76,5 @@ bun run deploy
 
 服务器上由 DynaPM 托管：配置好启动命令（`llrt streamhold.lrt`）、环境变量
 （.env 不会被 LLRT 自动加载，需由 DynaPM 的 env 注入）和健康检查
-（`/healthz`）即可，首次部署或更新只做上面三步。注意 `.lrt` 是绑定 llrt
+（`/healthz`）即可，首次部署或更新只做上面一条命令。注意 `.lrt` 是绑定 llrt
 版本的字节码，升级服务器 llrt 版本后需重新编译上传。

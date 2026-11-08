@@ -1,5 +1,7 @@
 # streamhold
 
+[![扫码加入开发者社群](https://streamhold.heartstack.space/svg/tsfullstack/group/gs.svg?from=streamhold)](https://tsfullstack.heartstack.space/group/gs?from=streamhold)
+
 占位保活反代：让**冷启动上游**的图片请求在**急性子代理**面前永不超时。
 
 ## 解决什么问题

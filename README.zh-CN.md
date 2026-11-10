@@ -36,7 +36,8 @@ padding 字节只是 XML 注释，对 `image/svg+xml` 完全合法；下游缓�
 
 ```bash
 cp .env.example .env   # 按需修改（.env 不入库，已 gitignore）
-bun run streamhold.ts
+pnpm build             # scriptc 编译为原生二进制 streamhold
+./streamhold
 ```
 
 ## 路由规则
@@ -74,16 +75,19 @@ bun run streamhold.ts
 ## 部署
 
 ```bash
-# 一条命令：转译 + 编译字节码 + 推服务器（llrt 不支持 TS 语法剥离，必须先转译）
+# 一条命令：编译原生二进制 + 推服务器
 bun run deploy
 
 # 等价分步：
-# tsdown                              # TS → streamhold.js（node 平台 cjs，保留 node:net 原生模块）
-# llrt compile streamhold.js          # JS → streamhold.lrt（字节码 + zstd）
-# scp streamhold.lrt root@<服务器>:/root/app/streamhold/
+# scriptc build --optimization speed --strip streamhold.ts -o streamhold
+# scp streamhold root@<服务器>:/root/app/streamhold/
 ```
 
-服务器上由 DynaPM 托管：配置好启动命令（`llrt streamhold.lrt`）、环境变量
-（.env 不会被 LLRT 自动加载，需由 DynaPM 的 env 注入）和健康检查
-（`/healthz`）即可，首次部署或更新只做上面一条命令。注意 `.lrt` 是绑定 llrt
-版本的字节码，升级服务器 llrt 版本后需重新编译上传。
+服务器上由 DynaPM 托管：配置好启动命令（`./streamhold`）、环境变量
+（.env 不会被自动加载，需由 DynaPM 的 env 注入）和健康检查
+（`/healthz`）即可，首次部署或更新只做上面一条命令。产物是自足的原生二进制，
+服务器上无需安装任何运行时。
+
+> 历史：本项目早期跑在 LLRT（`.lrt` 字节码）上，实测原生版吞吐约 3.4 倍、
+> 内存减半，且 LLRT 在 50 并发下会 segfault，对比报告见
+> `doc/bench-scriptc-vs-llrt.md`。

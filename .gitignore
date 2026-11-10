@@ -2,5 +2,6 @@ node_modules/
 .env
 
 # 构建产物，不入库（部署时本地构建）
-streamhold.js
-streamhold.lrt
+streamhold
+bun.lock
+streamhold.ll

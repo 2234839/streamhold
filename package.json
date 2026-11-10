@@ -4,15 +4,17 @@
   "description": "占位保活反代：让冷启动上游的图片请求在急性子代理（GitHub camo 等）面前永不超时",
   "type": "module",
   "scripts": {
-    "start": "bun run streamhold.ts",
-    "build": "tsdown && llrt compile streamhold.js",
-    "deploy": "tsdown && llrt compile streamhold.js && scp streamhold.lrt root@shenzilong.cn:/root/app/streamhold/"
+    "start": "scriptc run streamhold.ts",
+    "build": "SCRIPTC_TARGET=x86_64-linux-musl scriptc build --optimization speed --strip --exceptions rare streamhold.ts -o streamhold",
+    "check": "scriptc build --tier static-only streamhold.ts -o .static-check.tmp && rm .static-check.tmp",
+    "deploy": "pnpm build && scp streamhold \"${DEPLOY_TARGET:?请在环境或 .env 设置 DEPLOY_TARGET，如 root@<server>:/root/app/streamhold/streamhold-native}\""
   },
 
   "license": "MIT",
   "devDependencies": {
+    "@scriptc/runtime-linux-x64-musl": "0.4.10",
+    "@scriptc/types": "^0.4.9",
     "@types/node": "^26.6.6",
-    "tsdown": "^0.23.7",
     "typescript": "^7.0.2"
   }
 }

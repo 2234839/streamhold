@@ -28,7 +28,8 @@ The padding bytes are just an XML comment, perfectly legal inside `image/svg+xml
 
 ```bash
 cp .env.example .env   # edit as needed (.env is gitignored)
-bun run streamhold.ts
+pnpm build             # scriptc → native executable `streamhold`
+./streamhold
 ```
 
 ## Routing
@@ -64,18 +65,20 @@ This service starts in milliseconds, so it can be **cold-hosted by DynaPM direct
 ## Deployment
 
 ```bash
-# One command: transpile + compile bytecode + push to the server
-# (llrt does not strip TS syntax, so transpiling first is required)
+# One command: compile to a native executable + push to the server
 bun run deploy
 
 # Equivalent step-by-step:
-# tsdown                              # TS → streamhold.js (node-platform cjs, keeps native node:net)
-# llrt compile streamhold.js          # JS → streamhold.lrt (bytecode + zstd)
-# scp streamhold.lrt root@<server>:/root/app/streamhold/
+# scriptc build --optimization speed --strip streamhold.ts -o streamhold
+# scp streamhold root@<server>:/root/app/streamhold/
 ```
 
-On the server it is hosted by DynaPM: set the start command (`llrt streamhold.lrt`), env vars
-(.env is not auto-loaded by LLRT; inject via DynaPM's env) and the health check
-(`/healthz`). First deploy or updates only need the single command above. Note that `.lrt`
-is bytecode bound to the llrt version — recompile and re-upload after upgrading
-the server's llrt.
+On the server it is hosted by DynaPM: set the start command (`./streamhold`), env
+vars
+(.env is not auto-loaded; inject via DynaPM's env) and the health check
+(`/healthz`). First deploy or updates only need the single command above. The
+executable is self-contained — no runtime needs to be installed on the server.
+
+> History: this used to run on LLRT (bytecode `.lrt`). Benchmarks showed the
+> native build is ~3.4× faster throughput-wise, uses half the memory, and LLRT
+> segfaulted under 50-concurrency load — see `doc/bench-scriptc-vs-llrt.md`.
